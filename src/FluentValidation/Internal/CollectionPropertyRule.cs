@@ -117,9 +117,7 @@ namespace FluentValidation.Internal {
 			}
 
 			if (AsyncCondition != null) {
-				if (! AsyncCondition(context, default).GetAwaiter().GetResult()) {
-					return;
-				}
+				throw new AsyncValidatorInvokedSynchronouslyException();
 			}
 
 			var filteredValidators = GetValidatorsToExecute(context);
@@ -167,7 +165,7 @@ namespace FluentValidation.Internal {
 					foreach (var validator in filteredValidators) {
 						context.MessageFormatter.Reset();
 						if (validator.ShouldValidateAsynchronously(context)) {
-							InvokePropertyValidatorAsync(context, valueToValidate, propertyNameToValidate, validator, index, default).GetAwaiter().GetResult();
+							throw new AsyncValidatorInvokedSynchronouslyException();
 						}
 						else {
 							InvokePropertyValidator(context, valueToValidate, propertyNameToValidate, validator, index);
@@ -231,9 +229,7 @@ namespace FluentValidation.Internal {
 			}
 
 			if (AsyncCondition != null) {
-				if (! AsyncCondition(context, default).GetAwaiter().GetResult()) {
-					return;
-				}
+				throw new AsyncValidatorInvokedSynchronouslyException();
 			}
 
 			var filteredValidators = await GetValidatorsToExecuteAsync(context, cancellation);
@@ -337,9 +333,7 @@ namespace FluentValidation.Internal {
 				}
 
 				if (component.HasAsyncCondition) {
-					if (!component.InvokeAsyncCondition(context, default).GetAwaiter().GetResult()) {
-						validators.Remove(component);
-					}
+					throw new AsyncValidatorInvokedSynchronouslyException();
 				}
 			}
 
