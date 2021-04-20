@@ -664,6 +664,27 @@ namespace FluentValidation.Tests {
 		}
 
 
+		[Fact]
+		public void Shouldnt_throw_exception_when_configuring_rule_after_ForEach() {
+			var validator = new InlineValidator<Person>();
+
+			validator.RuleFor(x => x.Orders)
+				.ForEach(o => {
+					o.Must(v => true);
+				})
+				.Must((val) => true)
+				.WithMessage("what");
+
+			// The RuleBuilder is RuleBuilder<Person, IList<Order>>
+			// after the ForEach, it's returned as an IRuleBuilderOptions<Person, IEnumerable<Order>>
+
+			var result = validator.Validate(new Person() {
+				Orders = new List<Order>() { new Order()}
+			});
+
+			result.IsValid.ShouldBeTrue();
+		}
+
 		public class OrderValidator : AbstractValidator<Order> {
 			public OrderValidator() {
 				RuleFor(x => x.ProductName).NotEmpty();

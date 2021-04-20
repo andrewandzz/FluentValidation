@@ -26,12 +26,13 @@ namespace FluentValidation.Internal {
 	/// </summary>
 	/// <typeparam name="T">Type of object being validated</typeparam>
 	/// <typeparam name="TProperty">Type of property being validated</typeparam>
-	internal class RuleBuilder<T, TProperty> : IRuleBuilderOptions<T, TProperty>, IRuleBuilderInitial<T, TProperty>, IRuleBuilderInitialCollection<T,TProperty>, IRuleBuilderOptionsConditions<T, TProperty> {
+	internal class RuleBuilder<T, TProperty> : IRuleBuilderOptions<T, TProperty>, IRuleBuilderInitial<T, TProperty>, IRuleBuilderInitialCollection<T,TProperty>, IRuleBuilderOptionsConditions<T, TProperty>, IRuleBuilderInternal<T,TProperty> {
 
 		/// <summary>
 		/// The rule being created by this RuleBuilder.
 		/// </summary>
 		public IValidationRuleInternal<T, TProperty> Rule { get; }
+		IValidationRule<T, TProperty> IRuleBuilderInternal<T, TProperty>.Rule => Rule;
 
 		/// <summary>
 		/// Parent validator
@@ -112,5 +113,6 @@ namespace FluentValidation.Internal {
 		public void AddComponent(RuleComponent<T,TProperty> component) {
 			Rule.Components.Add(component);
 		}
+
 	}
 }

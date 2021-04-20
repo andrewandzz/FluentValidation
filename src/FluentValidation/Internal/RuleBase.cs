@@ -99,12 +99,12 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// The current validator being configured by this rule.
 		/// </summary>
-		public RuleComponent<T,TValue> CurrentValidator => _components.LastOrDefault();
+		public IRuleComponent<T,TValue> CurrentValidator => _components.LastOrDefault();
 
 		/// <summary>
 		/// The current rule component.
 		/// </summary>
-		public RuleComponent<T, TValue> Current => _components.LastOrDefault();
+		public IRuleComponent<T, TValue> Current => _components.LastOrDefault();
 
 		/// <summary>
 		/// Type of the property being validated
@@ -195,7 +195,7 @@ namespace FluentValidation.Internal {
 		/// <summary>
 		/// Allows custom creation of an error message
 		/// </summary>
-		public Func<MessageBuilderContext<T,TValue>, string> MessageBuilder { get; set; }
+		public Func<IMessageBuilderContext<T>, string> MessageBuilder { get; set; }
 
 		/// <summary>
 		/// Dependent rules

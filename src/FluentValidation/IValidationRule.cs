@@ -28,8 +28,7 @@ namespace FluentValidation {
 	using Results;
 	using Validators;
 
-
-	public interface IValidationRule<T, TProperty> : IValidationRule<T> {
+	public interface IValidationRule<T, out TProperty> : IValidationRule<T> {
 		/// <summary>
 		/// Cascade mode for this rule.
 		/// </summary>
@@ -67,15 +66,16 @@ namespace FluentValidation {
 		/// <summary>
 		/// The current rule component.
 		/// </summary>
-		RuleComponent<T,TProperty> Current { get; }
+		IRuleComponent<T,TProperty> Current { get; }
 
 		[Obsolete("The current validator is no longer directly exposed. Access the current component with rule.Current instead. This property will be removed in FluentValidation 11.")]
-		RuleComponent<T,TProperty> CurrentValidator { get; }
+		IRuleComponent<T,TProperty> CurrentValidator { get; }
+
 
 		/// <summary>
 		/// Allows custom creation of an error message
 		/// </summary>
-		public Func<MessageBuilderContext<T,TProperty>, string> MessageBuilder { get; set; }
+		public Func<IMessageBuilderContext<T>, string> MessageBuilder { get; set; }
 	}
 
 	public interface IValidationRule<T> : IValidationRule {
